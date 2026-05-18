@@ -1,0 +1,9 @@
+Linux Commands
+
+ls -la
+pwd
+mkdir aihub
+cd ./aihub
+cp codefile /aihub
+mv codefile codefilenew
+rm -rf aihub
