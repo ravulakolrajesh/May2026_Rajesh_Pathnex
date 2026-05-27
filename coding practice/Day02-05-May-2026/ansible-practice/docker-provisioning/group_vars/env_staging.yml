@@ -1,0 +1,5 @@
+---
+app_image_version: "nginx:1.25"       # Locked to a specific version for testing stability
+app_published_port: "80"              # Use standard HTTP port
+docker_restart_policy: "on-failure"
+cpu_shares: 512
