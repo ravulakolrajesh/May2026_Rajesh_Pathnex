@@ -1,0 +1,19 @@
+---
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1          # <--- Change to your AWS region
+
+# Only fetch running instances
+filters:
+  instance-state-name: [ 'running' ]
+
+# Group instances based on their AWS Tags
+keyed_groups:
+  - key: tags.Environment
+    prefix: env
+  - key: tags.Role
+    prefix: role
+
+# Set the SSH connection details dynamically
+hostnames:
+  - public-ip-address   # Use 'private-ip-address' if running inside a VPN/VPC
