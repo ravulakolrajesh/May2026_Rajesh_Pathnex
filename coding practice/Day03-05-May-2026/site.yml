@@ -1,0 +1,6 @@
+---
+- name: Deploy Complete Web Infrastructure
+  hosts: localhost
+  become: yes
+  roles:
+    - ansible-roles
