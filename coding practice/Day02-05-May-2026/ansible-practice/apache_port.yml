@@ -1,0 +1,17 @@
+---
+- name: Change Apache Port and Restart
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Change Apache port from 80 to 8080
+      ansible.builtin.lineinfile:
+        path: /etc/apache2/ports.conf
+        regexp: '^Listen 80'
+        line: 'Listen 8080'
+      notify: Restart Apache Service  # This triggers the handler below
+
+  handlers:
+    - name: Restart Apache Service
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
