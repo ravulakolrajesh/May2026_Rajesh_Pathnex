@@ -1,0 +1,5 @@
+---
+app_image_version: "nginx:alpine"      # Lightweight image for fast pulling
+app_published_port: "8080"            # Use a non-standard port for dev testing
+docker_restart_policy: "no"           # Don't waste resources restarting failed dev containers
+cpu_shares: 256                       # Low CPU priority
