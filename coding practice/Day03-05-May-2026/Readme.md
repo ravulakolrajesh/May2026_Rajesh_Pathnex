@@ -1,3 +1,4 @@
+# Generating folder structure
 -- ansible-galaxy to automatically generate the correct folder blueprint. 
 -- ansible-galaxy role init webserver 
 -- If you run tree webserver tasks/main.yml: The main list of steps the role executes. 
