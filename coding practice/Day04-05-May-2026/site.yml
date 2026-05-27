@@ -1,0 +1,6 @@
+---
+- name: Target Live AWS Production Infrastructure
+  hosts: tag_Environment_Production
+  become: yes
+  roles:
+    - webserver
