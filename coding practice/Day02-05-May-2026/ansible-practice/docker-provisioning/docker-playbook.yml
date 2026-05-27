@@ -1,0 +1,64 @@
+---
+- name: Provision Docker and Deploy Container
+  hosts: managed_nodes
+  become: yes
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Install required system packages
+      ansible.builtin.package:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Add Docker GPG apt Key
+      ansible.builtin.apt_key:
+        url: https://docker.com
+        state: present
+
+    - name: Add Docker Repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://docker.com {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Install Docker Engine
+      ansible.builtin.package:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running and enabled
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: "{{ item }}"
+        groups: docker
+        append: yes
+      loop: "{{ docker_users }}"
+
+    - name: Install Docker Python SDK
+      ansible.builtin.pip:
+        name: docker
+        state: present
+
+    - name: Deploy Docker Container
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ container_image }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "{{ published_port }}:{{ container_port }}"
