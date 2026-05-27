@@ -1,0 +1,5 @@
+---
+app_image_version: "nginx:1.25-alpine" # Verified production-grade image
+app_published_port: "80"              # Standard HTTP port
+docker_restart_policy: "always"       # Always restart to minimize downtime
+cpu_shares: 1024                      # High CPU priority
