@@ -11,3 +11,26 @@ instance states, or regions. aws_ec2 plugin can dynamically track your AWS EC2 i
 # Step4: Verify Your Live Infrastructure
   ansible-inventory --graph
 # Step5: Run Playbooks Against Dynamic Groups: delete any inventory.ini file if exists. target groups are determined strictly by your live AWS tags.
+
+# Update the playbook: If EC2 instances have an AWS tag of Role=webserver, a group named role_webserver would be created.
+---
+- name: Provision Docker on External EC2 Instances
+  hosts: role_webserver                      # <--- Targets EC2 instances with Tag Role=webserver
+  become: yes
+  remote_user: ubuntu                         # <--- Default user for Ubuntu EC2 AMIs
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    # ... Keep your existing Docker installation tasks exactly the same ...
+
+# Install the AWS collection & Boto3
+ansible-galaxy collection install amazon.aws
+pip install boto3 botocore
+
+# Configure AWS Credentials
+export AWS_ACCESS_KEY_ID="your_access_key"
+export AWS_SECRET_ACCESS_KEY="your_secret_key"
+
+ansible-inventory -i aws_ec2.yml --graph
+ansible-playbook -i aws_ec2.yml playbook.yml --private-key=/path/to/your-aws-key.pem
