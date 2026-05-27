@@ -1,0 +1,8 @@
+---
+# Track external dependencies
+roles:
+  - name: geerlingguy.git
+    version: "3.0.0" # Lock the version for stability
+
+  - name: geerlingguy.docker
+    version: "7.4.2"
