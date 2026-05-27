@@ -1,0 +1,22 @@
+---
+- name: Provision Docker and Deploy Environment-Specific Container
+  hosts: all
+  become: yes
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    # ... Keep your existing Docker installation tasks the same ...
+
+    - name: Deploy Docker Container with Environment Settings
+      community.docker.docker_container:
+        name: "web_server"
+        image: "{{ app_image_version }}"
+        state: started
+        restart_policy: "{{ docker_restart_policy }}"
+        ports:
+          - "{{ app_published_port }}:80"
+        container_default_behavior: compatibility
+        # Optional: Apply CPU limits dynamically
+        etc_hosts:
+          "env.type": "loaded"
