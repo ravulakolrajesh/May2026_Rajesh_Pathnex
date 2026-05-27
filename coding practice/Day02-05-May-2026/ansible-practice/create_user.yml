@@ -1,0 +1,33 @@
+---
+- name: Provision Developer System User
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Create a user group called 'devs'
+      ansible.builtin.group:
+        name: devs
+        state: present
+
+    - name: Create the user 'developer' assigned to the devs group
+      ansible.builtin.user:
+        name: developer
+        shell: /bin/bash
+        groups: devs
+        append: yes
+        state: present
+
+    - name: Ensure the user has a .ssh directory with secure permissions
+      ansible.builtin.file:
+        path: /home/developer/.ssh
+        state: directory
+        owner: developer
+        group: devs
+        mode: '0700'
+
+    - name: Allow 'devs' group members passwordless sudo access
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%devs'
+        line: '%devs ALL=(ALL) NOPASSWD: ALL'
+        validate: '/usr/sbin/visudo -cf %s' # Validates syntax before saving!
