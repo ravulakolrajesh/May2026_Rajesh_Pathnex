@@ -1,0 +1,12 @@
+---
+- name: Deploy Dynamic Web Page
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Generate index.html from template
+      ansible.builtin.template:
+        src: info.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
