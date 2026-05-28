@@ -1,0 +1,13 @@
+---
+- name: Practice file management
+  hosts: localhost
+  tasks:
+    - name: Create directory
+      ansible.builtin.file:
+        path: /tmp/ansible_test
+        state: directory
+
+    - name: Create and Write to file
+      ansible.builtin.copy:
+        content: "Hello, ansible welcome"
+        dest: /tmp/ansible_test/hello.txt

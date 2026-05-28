@@ -1,0 +1,16 @@
+---
+- name: Deploy Complete Web Infrastructure
+  hosts: localhost
+  become: yes
+  roles:
+    - ansible-roles
+
+---
+- name: Deploy Complete Web Infrastructure
+  hosts: localhost
+  become: yes
+  roles:
+    - role: webserver
+      vars:
+        web_port: 8080
+        site_title: "Staging Testing Server"

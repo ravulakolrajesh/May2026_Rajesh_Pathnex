@@ -1,0 +1,22 @@
+---
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1                  # <--- Update to your specific AWS region
+
+filters:
+  instance-state-name: [ 'running' ]
+
+# Automatically creates inventory groups based on your tags
+keyed_groups:
+  - key: tags.environment
+    prefix: env
+  - key: tags.team
+    prefix: team
+
+# Combines tags to let you target specific intersections (e.g., team_cpi_and_env_dev)
+groups:
+  cpi_dev: "'team_cpi' in groups and 'env_dev' in groups"
+  mhub_prod: "'team_mhub' in groups and 'env_prod' in groups"
+
+hostnames:
+  - public-ip-address          # Uses Public IP. Change to private-ip-address if inside a VPN

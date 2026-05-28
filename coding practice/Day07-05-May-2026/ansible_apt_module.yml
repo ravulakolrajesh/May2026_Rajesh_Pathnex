@@ -1,0 +1,32 @@
+- name: Update and upgrade all packages
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache and upgrade all packages
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: safe # Can also be 'dist', 'full', or 'yes'
+
+update_cache: yes: Equivalent to running sudo apt update. It refreshes the local package repository metadata.
+upgrade: Equivalent to sudo apt upgrade.
+Common values include:
+  yes / safe: Upgrades all packages without removing any existing ones.
+  dist / full: Upgrades everything and may install or remove packages to resolve dependencies (like apt full-upgrade).
+
+ansible all -m apt -a "update_cache=yes upgrade=yes" --become
+
+- name: Remove dependencies that are no longer required
+  ansible.builtin.apt:
+    autoremove: yes
+    autoclean: yes
+
+ansible.builtin.file: Manages file permissions, ownership, and creates/deletes directories or symlinks.
+ansible.builtin.copy: Transfers files from your control node (or local machine) to remote targets.
+ansible.builtin.lineinfile: Ensures a specific line is present (or absent) in a file.
+ansible.builtin.apt / ansible.builtin.yum: Manages packages on Debian/Ubuntu (apt) or RedHat/CentOS (yum) systems.
+ansible.builtin.service: Starts, stops, or restarts services (e.g., httpd, nginx, sshd) on your target machines.
+ansible.builtin.template: Leverages Jinja2 templating to generate dynamic configuration files on remote servers. Great for injecting dynamic variables into configs.
+ansible.builtin.user: Creates, modifies, or deletes system user accounts, sets SSH keys, and manages group memberships.
+amazon.aws.ec2_instance: Provisions virtual machines in AWS. (Similar modules exist for Azure and GCP).
+ansible.builtin.git: Clones repositories, checks out specific branches, and ensures your remote servers have the latest codebase from GitHub.
+ansible.builtin.shell: Runs arbitrary shell commands and supports pipes and operators (unlike the basic command module)

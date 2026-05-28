@@ -1,0 +1,35 @@
+---
+- name: Setup Apache Web Server
+  hosts: all
+  become: yes
+  vars:
+    apache_pkg: "{{'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+  tasks:
+    - name: Update package cache (Ubuntu/Debian)
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Apache package
+      ansible.builtin.package:
+        name: "{{ apache_pkg }}"
+        state: present
+
+    - name: Start and Enable Apache Service
+      ansible.builtin.service:
+        name: "{{ apache_pkg }}"
+        state: started
+        enabled: yes
+
+    - name: Create Index.html
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: "<h1>Hello to EC2 Instance</h1><p>The hostname of the instance is: {{ansible_hostname}}</pi>"
+        mode: 0644
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: "{{ apache_pkg }}"
+        state: restarted

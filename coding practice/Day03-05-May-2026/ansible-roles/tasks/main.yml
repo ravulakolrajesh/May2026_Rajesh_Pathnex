@@ -1,0 +1,28 @@
+---
+# tasks file for webserver
+- name: Install Apache web server
+  ansible.builtin.apt:
+    name: apache2
+    state: present
+    update_cache: yes
+
+- name: Configure Apache port
+  ansible.builtin.lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen '
+    line: "Listen {{ web_port }}"
+  notify: Restart Apache
+
+- name: Deploy dynamic index page
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    owner: www-data
+    group: www-data
+    mode: '0644'
+
+- name: Start Apache service
+  ansible.builtin.service:
+    name: apache2
+    state: started
+    enabled: yes

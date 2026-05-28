@@ -1,0 +1,6 @@
+---
+docker_users: ["ubuntu"]
+container_name: "my_web_server"
+container_image: "nginx:latest"
+published_port: "8080"
+container_port: "80"

@@ -1,0 +1,20 @@
+---
+plugin: amazon.aws.aws_ec2
+
+# Define which AWS regions to scan
+regions:
+  - us-east-1
+
+# Only target instances that are currently running
+filters:
+  instance-state-name: :running
+
+# Group your instances automatically based on their AWS Tags
+keyed_groups:
+  - prefix: tag
+    key: tags
+
+# Set what Ansible will use as the host connection address
+hostnames:
+  - dns-name
+  - private-ip-address

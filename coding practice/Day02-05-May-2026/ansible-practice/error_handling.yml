@@ -1,0 +1,23 @@
+---
+- name: Advanced Error Handling Practice
+  hosts: localhost
+  tasks:
+    - name: Attempt dangerous operations
+      block:
+        - name: This task will succeed
+          ansible.builtin.debug:
+            msg: "Starting critical tasks..."
+
+        - name: This task will fail intentionally
+          ansible.builtin.command: ls /root/this_file_does_not_exist
+          # Note: This fails because non-root users cannot read /root
+
+      rescue:
+        - name: Handle the failure
+          ansible.builtin.debug:
+            msg: "CAUGHT ERROR: The previous block failed! Running recovery steps..."
+
+      always:
+        - name: Ultimate cleanup
+          ansible.builtin.debug:
+            msg: "ALWAYS RUNNING: Cleaning up temporary files and closing connections."
